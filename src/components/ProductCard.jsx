@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { ShoppingCartIcon, HeartIcon, ShareIcon, Search, X } from 'lucide-react';
+import { ShoppingCartIcon, HeartIcon, ShareIcon } from 'lucide-react';
 
 const CardWrapper = styled.div`
   border: 1px solid #ddd;
@@ -109,74 +109,77 @@ const Star = styled.span`
   font-size: 16px;
 `;
 
-// ===== NEW CODE BELOW: SearchBar Component with A11y Violations =====
+// ===== NEW CODE BELOW: ReviewSection with A11y Violations =====
 
-const SearchContainer = styled.div`
-  display: flex;
-  gap: 8px;
+const ReviewsContainer = styled.div`
+  margin-top: 16px;
   padding: 12px;
   background: #f5f5f5;
   border-radius: 8px;
-  margin-bottom: 16px;
 `;
 
-const SearchInput = styled.input`
-  flex: 1;
+const ReviewsTitle = styled.h3`
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: #333;
+`;
+
+const ReviewItem = styled.div`
   padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-`;
-
-const SearchButton = styled.button`
-  padding: 8px 12px;
-  background-color: #0066FF;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-`;
-
-const ClearButton = styled.button`
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  border: 1px solid #ddd;
+  margin-bottom: 8px;
   background: white;
   border-radius: 4px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 `;
 
-function SearchBar() {
-  const [query, setQuery] = useState('');
+const ReviewAuthor = styled.div`
+  font-weight: 600;
+  color: #AAAAAA;
+  font-size: 13px;
+  margin-bottom: 4px;
+`;
 
-  const handleSearch = () => {
-    console.log('Searching for:', query);
-  };
+const ReviewText = styled.p`
+  font-size: 12px;
+  color: #666;
+  margin: 0;
+`;
 
-  const handleClear = () => {
-    setQuery('');
-  };
+const ReviewButton = styled.button`
+  width: 100%;
+  padding: 8px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  outline: none;
+  margin-top: 8px;
+`;
+
+function ReviewSection() {
+  const [showReviews, setShowReviews] = useState(false);
+
+  const reviews = [
+    { id: 1, author: 'John D.', text: 'Great product!' },
+    { id: 2, author: 'Sarah M.', text: 'Excellent quality' },
+  ];
 
   return (
-    <SearchContainer>
-      <SearchInput
-        type="text"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search products..."
-        style={{ color: '#CCCCCC' }}
-      />
-      <SearchButton onClick={handleSearch} style={{ outline: 'none' }}>
-        <Search size={16} />
-      </SearchButton>
-      <ClearButton onClick={handleClear}>
-        <X size={16} />
-      </ClearButton>
-    </SearchContainer>
+    <ReviewsContainer>
+      <ReviewsTitle>Customer Reviews</ReviewsTitle>
+      
+      {showReviews && reviews.map((review) => (
+        <ReviewItem key={review.id}>
+          <ReviewAuthor>{review.author}</ReviewAuthor>
+          <ReviewText>{review.text}</ReviewText>
+        </ReviewItem>
+      ))}
+
+      <ReviewButton onClick={() => setShowReviews(!showReviews)}>
+        {showReviews ? 'Hide Reviews' : 'Show All Reviews'}
+      </ReviewButton>
+    </ReviewsContainer>
   );
 }
 
@@ -197,54 +200,52 @@ export function ProductCard({ product }) {
   };
 
   return (
-    <div>
-      <SearchBar />
-      
-      <CardWrapper>
-        <ProductImage 
-          src={product.image}
-          alt={`Product image: ${product.name}`}
-        />
+    <CardWrapper>
+      <ProductImage 
+        src={product.image}
+        alt={`Product image: ${product.name}`}
+      />
 
-        <ProductName>{product.name}</ProductName>
+      <ProductName>{product.name}</ProductName>
 
-        <Price>${product.price}</Price>
+      <Price>${product.price}</Price>
 
-        <Description>{product.description}</Description>
+      <Description>{product.description}</Description>
 
-        <RatingContainer>
-          {Array.from({ length: 5 }).map((_, i) => (
-            <Star key={i}>★</Star>
-          ))}
-          <span style={{ marginLeft: '4px', color: '#666' }}>({product.reviews})</span>
-        </RatingContainer>
+      <RatingContainer>
+        {Array.from({ length: 5 }).map((_, i) => (
+          <Star key={i}>★</Star>
+        ))}
+        <span style={{ marginLeft: '4px', color: '#666' }}>({product.reviews})</span>
+      </RatingContainer>
 
-        <ActionButtons>
-          <CartButton 
-            onClick={handleAddToCart}
-            aria-label="Add product to cart"
-          >
-            <ShoppingCartIcon size={16} style={{ marginRight: '4px' }} />
-            Add to Cart
-          </CartButton>
-
-          <IconButton 
-            onClick={handleAddToWishlist}
-            aria-label="Add product to wishlist"
-          >
-            <HeartIcon size={20} />
-          </IconButton>
-        </ActionButtons>
-
-        <ShareLink 
-          href="#" 
-          onClick={handleShare}
+      <ActionButtons>
+        <CartButton 
+          onClick={handleAddToCart}
+          aria-label="Add product to cart"
         >
-          <ShareIcon size={16} style={{ display: 'inline', marginRight: '4px' }} />
-          Share Product
-        </ShareLink>
-      </CardWrapper>
-    </div>
+          <ShoppingCartIcon size={16} style={{ marginRight: '4px' }} />
+          Add to Cart
+        </CartButton>
+
+        <IconButton 
+          onClick={handleAddToWishlist}
+          aria-label="Add product to wishlist"
+        >
+          <HeartIcon size={20} />
+        </IconButton>
+      </ActionButtons>
+
+      <ShareLink 
+        href="#" 
+        onClick={handleShare}
+      >
+        <ShareIcon size={16} style={{ display: 'inline', marginRight: '4px' }} />
+        Share Product
+      </ShareLink>
+
+      <ReviewSection />
+    </CardWrapper>
   );
 }
 
