@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { ShoppingCartIcon, HeartIcon, ShareIcon } from 'lucide-react';
+import { ShoppingCartIcon, HeartIcon, ShareIcon, Search, X } from 'lucide-react';
 
 const CardWrapper = styled.div`
   border: 1px solid #ddd;
@@ -109,6 +109,79 @@ const Star = styled.span`
   font-size: 16px;
 `;
 
+// ===== NEW CODE BELOW: SearchBar Component with A11y Violations =====
+
+const SearchContainer = styled.div`
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  margin-bottom: 16px;
+`;
+
+const SearchInput = styled.input`
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+`;
+
+const SearchButton = styled.button`
+  padding: 8px 12px;
+  background-color: #0066FF;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+`;
+
+const ClearButton = styled.button`
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+function SearchBar() {
+  const [query, setQuery] = useState('');
+
+  const handleSearch = () => {
+    console.log('Searching for:', query);
+  };
+
+  const handleClear = () => {
+    setQuery('');
+  };
+
+  return (
+    <SearchContainer>
+      <SearchInput
+        type="text"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search products..."
+        style={{ color: '#CCCCCC' }}
+      />
+      <SearchButton onClick={handleSearch} style={{ outline: 'none' }}>
+        <Search size={16} />
+      </SearchButton>
+      <ClearButton onClick={handleClear}>
+        <X size={16} />
+      </ClearButton>
+    </SearchContainer>
+  );
+}
+
+// ===== END NEW CODE =====
+
 export function ProductCard({ product }) {
   const handleAddToCart = () => {
     console.log('Added to cart:', product.id);
@@ -124,50 +197,54 @@ export function ProductCard({ product }) {
   };
 
   return (
-    <CardWrapper>
-      <ProductImage 
-        src={product.image}
-        alt={`Product image: ${product.name}`}
-      />
+    <div>
+      <SearchBar />
+      
+      <CardWrapper>
+        <ProductImage 
+          src={product.image}
+          alt={`Product image: ${product.name}`}
+        />
 
-      <ProductName>{product.name}</ProductName>
+        <ProductName>{product.name}</ProductName>
 
-      <Price>${product.price}</Price>
+        <Price>${product.price}</Price>
 
-      <Description>{product.description}</Description>
+        <Description>{product.description}</Description>
 
-      <RatingContainer>
-        {Array.from({ length: 5 }).map((_, i) => (
-          <Star key={i}>★</Star>
-        ))}
-        <span style={{ marginLeft: '4px', color: '#666' }}>({product.reviews})</span>
-      </RatingContainer>
+        <RatingContainer>
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Star key={i}>★</Star>
+          ))}
+          <span style={{ marginLeft: '4px', color: '#666' }}>({product.reviews})</span>
+        </RatingContainer>
 
-      <ActionButtons>
-        <CartButton 
-          onClick={handleAddToCart}
-          aria-label="Add product to cart"
+        <ActionButtons>
+          <CartButton 
+            onClick={handleAddToCart}
+            aria-label="Add product to cart"
+          >
+            <ShoppingCartIcon size={16} style={{ marginRight: '4px' }} />
+            Add to Cart
+          </CartButton>
+
+          <IconButton 
+            onClick={handleAddToWishlist}
+            aria-label="Add product to wishlist"
+          >
+            <HeartIcon size={20} />
+          </IconButton>
+        </ActionButtons>
+
+        <ShareLink 
+          href="#" 
+          onClick={handleShare}
         >
-          <ShoppingCartIcon size={16} style={{ marginRight: '4px' }} />
-          Add to Cart
-        </CartButton>
-
-        <IconButton 
-          onClick={handleAddToWishlist}
-          aria-label="Add product to wishlist"
-        >
-          <HeartIcon size={20} />
-        </IconButton>
-      </ActionButtons>
-
-      <ShareLink 
-        href="#" 
-        onClick={handleShare}
-      >
-        <ShareIcon size={16} style={{ display: 'inline', marginRight: '4px' }} />
-        Share Product
-      </ShareLink>
-    </CardWrapper>
+          <ShareIcon size={16} style={{ display: 'inline', marginRight: '4px' }} />
+          Share Product
+        </ShareLink>
+      </CardWrapper>
+    </div>
   );
 }
 
