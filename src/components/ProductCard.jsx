@@ -29,13 +29,13 @@ const ProductName = styled.h3`
 const Price = styled.p`
   font-size: 20px;
   font-weight: 700;
-  color: #0066FF;
+  color: #0033CC;
   margin: 0 0 16px 0;
 `;
 
 const Description = styled.p`
   font-size: 14px;
-  color: #888;
+  color: #666;
   margin: 0 0 16px 0;
   line-height: 1.5;
 `;
@@ -46,9 +46,11 @@ const ActionButtons = styled.div`
   margin-bottom: 12px;
 `;
 
-const Button = styled.button`
+const CartButton = styled.button`
   flex: 1;
-  padding: 10px;
+  padding: 12px;
+  background-color: #0033CC;
+  color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -57,20 +59,12 @@ const Button = styled.button`
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: #f0f0f0;
+    background-color: #0028a0;
   }
 
-  &:active {
-    background-color: #e0e0e0;
-  }
-`;
-
-const CartButton = styled(Button)`
-  background-color: #0066FF;
-  color: white;
-
-  &:hover {
-    background-color: #0052cc;
+  &:focus-visible {
+    outline: 2px solid #0033CC;
+    outline-offset: 2px;
   }
 `;
 
@@ -90,13 +84,18 @@ const IconButton = styled.button`
   &:hover {
     border-color: #999;
   }
+
+  &:focus-visible {
+    outline: 2px solid #0033CC;
+    outline-offset: 2px;
+  }
 `;
 
 const ShareLink = styled.a`
   display: block;
   text-align: center;
   padding: 12px;
-  color: #0066FF;
+  color: #0033CC;
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
@@ -107,12 +106,18 @@ const ShareLink = styled.a`
   &:hover {
     background-color: #f9f9f9;
   }
+
+  &:focus-visible {
+    outline: 2px solid #0033CC;
+    outline-offset: 2px;
+  }
 `;
 
 const RatingContainer = styled.div`
   display: flex;
   gap: 4px;
   margin-bottom: 12px;
+  align-items: center;
 `;
 
 const Star = styled.span`
@@ -136,7 +141,10 @@ export function ProductCard({ product }) {
 
   return (
     <CardWrapper>
-      <ProductImage src={product.image} />
+      <ProductImage 
+        src={product.image}
+        alt={`Product image: ${product.name}`}
+      />
 
       <ProductName>{product.name}</ProductName>
 
@@ -148,23 +156,32 @@ export function ProductCard({ product }) {
         {Array.from({ length: 5 }).map((_, i) => (
           <Star key={i}>★</Star>
         ))}
-        <span style={{ marginLeft: '4px', color: '#888' }}>({product.reviews})</span>
+        <span style={{ marginLeft: '4px', color: '#666' }}>({product.reviews})</span>
       </RatingContainer>
 
       <ActionButtons>
-        <CartButton onClick={handleAddToCart} style={{ outline: 'none' }}>
+        <CartButton 
+          onClick={handleAddToCart}
+          aria-label="Add product to cart"
+        >
           <ShoppingCartIcon size={16} style={{ marginRight: '4px' }} />
-          Add
+          Add to Cart
         </CartButton>
 
-        <IconButton onClick={handleAddToWishlist}>
+        <IconButton 
+          onClick={handleAddToWishlist}
+          aria-label="Add product to wishlist"
+        >
           <HeartIcon size={20} />
         </IconButton>
       </ActionButtons>
 
-      <ShareLink href="#" onClick={handleShare} style={{ color: '#888' }}>
+      <ShareLink 
+        href="#" 
+        onClick={handleShare}
+      >
         <ShareIcon size={16} style={{ display: 'inline', marginRight: '4px' }} />
-        Share
+        Share Product
       </ShareLink>
     </CardWrapper>
   );
