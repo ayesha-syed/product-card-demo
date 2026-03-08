@@ -56,11 +56,6 @@ const CartButton = styled.button`
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: #0028a0;
-  }
 
   &:focus-visible {
     outline: 2px solid #0033CC;
@@ -79,11 +74,6 @@ const IconButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: border-color 0.2s;
-
-  &:hover {
-    border-color: #999;
-  }
 
   &:focus-visible {
     outline: 2px solid #0033CC;
@@ -101,11 +91,6 @@ const ShareLink = styled.a`
   font-weight: 500;
   border: 1px solid #ddd;
   border-radius: 4px;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: #f9f9f9;
-  }
 
   &:focus-visible {
     outline: 2px solid #0033CC;
@@ -117,7 +102,6 @@ const RatingContainer = styled.div`
   display: flex;
   gap: 4px;
   margin-bottom: 12px;
-  align-items: center;
 `;
 
 const Star = styled.span`
